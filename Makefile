@@ -96,9 +96,9 @@ CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = n
 ###################### Platform Related #######################
-CONFIG_PLATFORM_I386_PC = y
+CONFIG_PLATFORM_I386_PC = n
 CONFIG_PLATFORM_ANDROID_ARM64 = n
-CONFIG_PLATFORM_ARM_RPI = n
+CONFIG_PLATFORM_ARM_RPI = y
 CONFIG_PLATFORM_ARM64_RPI = n
 CONFIG_PLATFORM_ARM_NV_NANO = n
 CONFIG_PLATFORM_ANDROID_X86 = n
@@ -1160,11 +1160,11 @@ ifeq ($(CONFIG_PLATFORM_ARM_RPI), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH ?= arm
-CROSS_COMPILE ?=
-KVER ?= $(shell uname -r)
-KSRC := /lib/modules/$(KVER)/build
-MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
-INSTALL_PREFIX :=
+CROSS_COMPILE ?= arm-linux-gnueabihf-
+KVER ?= 4.19.94
+KSRC ?= /home/kikuchi/src/MAE3xx/linux-kernel-wireguard-ti-4.19.y
+MODDESTDIR := /tmp/lib/modules/$(KVER)/kernel/drivers/net/wireless/
+INSTALL_PREFIX := /tmp/MAE3xx
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM64_RPI), y)
@@ -2264,7 +2264,7 @@ strip:
 
 install:
 	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-	/sbin/depmod -a ${KVER}
+#	/sbin/depmod -a ${KVER}
 
 uninstall:
 	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
